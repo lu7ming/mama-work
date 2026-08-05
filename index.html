@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+    <title>🌷 妈妈的工作台</title>
+    <style>
+        /* ========== CSS 变量 (暖粉色主题 & 暗色模式) ========== */
+        :root {
+            --bg-body: #fdf6f0;
+            --bg-card: #ffffff;
+            --bg-input: #fff9f5;
+            --bg-nav: #ffe8e0;
+            --bg-btn: #f7d0c0;
+            --bg-btn-hover: #f0bfab;
+            --text-primary: #4a3a35;
+            --text-secondary: #7a6a65;
+            --text-muted: #b5a09a;
+            --border-color: #f0ddd5;
+            --shadow-color: rgba(180, 120, 100, 0.10);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --font-size-base: 18px;
+            --transition: 0.25s ease;
+        }
+
+        /* 暗色模式 */
+        [data-theme="dark"] {
+            --bg-body: #2a2522;
+            --bg-card: #3d3530;
+            --bg-input: #4a413b;
+            --bg-nav: #4a3a33;
+            --bg-btn: #5a4a43;
+            --bg-btn-hover: #6a5a53;
+            --text-primary: #f0e8e0;
+            --text-secondary: #c0b8b0;
+            --text-muted: #8a807a;
+            --border-color: #5a4a43;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+        }
+
+        /* ========== 全局重置 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            padding: 16px 12px 80px 12px;
+            transition: background var(--transition), color var(--transition);
+            min-height: 100vh;
+        }
+
+        /* ========== 通用组件 ========== */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* 顶部栏 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 4px 16px 4px;
+        }
+        .header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--text-primary);
+            letter-spacing: 0.5px;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .theme-toggle {
+            background: var(--bg-nav);
+            border: none;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-size: 16px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background var(--transition);
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        .theme-toggle:hover {
+            background: var(--bg-btn-hover);
+        }
+
+        /* 导航标签 */
+        .nav-tabs {
+            display: flex;
+            gap: 6px;
+            background: var(--bg-nav);
+            border-radius: 40px;
+            padding: 6px;
+            margin-bottom: 20px;
+            transition: background var(--transition);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .nav-tabs button {
+            flex: 1;
+            min-width: 60px;
+            padding: 10px 6px;
+            border: none;
+            border-radius: 30px;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition);
+            white-space: nowrap;
+        }
+        .nav-tabs button.active {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        .nav-tabs button:hover {
+            color: var(--text-primary);
+        }
+
+        /* 卡片 */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 20px 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 4px 16px var(--shadow-color);
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 表单元素 - 大、友好 */
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 17px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: border var(--transition), background var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #e8b8a8;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: 500;
+            border: none;
+            border-radius: 40px;
+            background: var(--bg-btn);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition);
+            min-height: 56px;
+            min-width: 80px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        .btn:hover {
+            background: var(--bg-btn-hover);
+            transform: translateY(-1px);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-primary {
+            background: #e8b8a8;
+            color: #4a3a35;
+        }
+        .btn-primary:hover {
+            background: #ddac9a;
+        }
+        .btn-danger {
+            background: #f0d0c8;
+            color: #8a4a3a;
+        }
+        .btn-danger:hover {
+            background: #e8c0b8;
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 15px;
+            min-height: 40px;
+            min-width: 50px;
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .row>* {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        /* 列表 */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: border var(--transition);
+        }
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        .list-item .info {
+            flex: 1;
+            margin-right: 12px;
+        }
+        .list-item .info .main {
+            font-size: 17px;
+            font-weight: 500;
+        }
+        .list-item .info .sub {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .list-item .actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: 14px;
+            background: var(--bg-nav);
+            color: var(--text-secondary);
+        }
+        .tag-income {
+            background: #d4e8d4;
+            color: #2a6a3a;
+        }
+        .tag-expense {
+            background: #f0d0c8;
+            color: #7a3a2a;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 10px;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        /* 统计卡片 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+        .stat-item {
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 14px 12px;
+            text-align: center;
+            transition: background var(--transition);
+        }
+        .stat-item .number {
+            font-size: 26px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .stat-item .label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .stat-item .number.income {
+            color: #3a8a4a;
+        }
+        .stat-item .number.expense {
+            color: #c05a4a;
+        }
+
+        /* 生日提醒 */
+        .birthday-highlight {
+            background: #fce8e0;
+            border-radius: var(--radius-sm);
+            padding: 8px 14px;
+            margin-top: 6px;
+            font-size: 15px;
+            color: #8a4a3a;
+        }
+        [data-theme="dark"] .birthday-highlight {
+            background: #5a3a33;
+            color: #f0c8b8;
+        }
+
+        /* ========== 页面切换 ========== */
+        .page {
+            display: none;
+        }
+        .page.active {
+            display: block;
+        }
+
+        /* ========== 响应式微调 ========== */
+        @media (max-width: 420px) {
+            body {
+                padding: 12px 8px 70px 8px;
+                font-size: 16px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .nav-tabs button {
+                font-size: 14px;
+                padding: 8px 4px;
+                min-width: 50px;
+            }
+            .btn {
+                font-size: 16px;
+                padding: 12px 18px;
+                min-height: 48px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 6px;
+            }
+            .stat-item .number {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <!-- ====== 顶栏 ====== -->
+        <header class="header">
+            <h1>🌷 妈妈的工作台</h1>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换深色/浅色模式">🌙 暗色</button>
+            </div>
+        </header>
+
+        <!-- ====== 导航 ====== -->
+        <nav class="nav-tabs" id="navTabs">
+            <button class="active" data-page="home">🏠 首页</button>
+            <button data-page="accounting">💰 记账</button>
+            <button data-page="todo">✅ 待办</button>
+            <button data-page="birthday">🎂 生日</button>
+            <button data-page="health">❤️ 健康</button>
+        </nav>
+
+        <!-- ====== 页面容器 ====== -->
+        <div id="pageContainer">
+            <!-- 首页 -->
+            <div class="page active" id="page-home">
+                <div class="card">
+                    <div class="card-title">📊 本月概览</div>
+                    <div class="stats-grid" id="homeStats">
+                        <div class="stat-item"><div class="number" id="homeIncome">0</div><div class="label">收入</div></div>
+                        <div class="stat-item"><div class="number" id="homeExpense">0</div><div class="label">支出</div></div>
+                        <div class="stat-item"><div class="number" id="homeBalance">0</div><div class="label">结余</div></div>
+                        <div class="stat-item"><div class="number" id="homeTodoCount">0</div><div class="label">待办</div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">🎂 近期生日</div>
+                    <div id="homeBirthdays"><div class="empty-state">暂无家人生日记录</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">❤️ 最近健康</div>
+                    <div id="homeHealth"><div class="empty-state">暂无健康数据</div></div>
+                </div>
+            </div>
+
+            <!-- 记账 -->
+            <div class="page" id="page-accounting">
+                <div class="card">
+                    <div class="card-title">📝 记一笔</div>
+                    <div class="row" style="margin-bottom:10px;">
+                        <input type="number" id="acctAmount" placeholder="金额 (元)" step="0.01" min="0" />
+                        <select id="acctType">
+                            <option value="income">收入</option>
+                            <option value="expense">支出</option>
+                        </select>
+                    </div>
+                    <input type="text" id="acctCategory" placeholder="类别 (如：买菜、日用、工资…)" style="margin-bottom:10px;" />
+                    <input type="date" id="acctDate" style="margin-bottom:10px;" />
+                    <button class="btn btn-primary" id="acctSaveBtn">✅ 保存记录</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">
+                        <span>📋 流水账</span>
+                        <div>
+                            <input type="month" id="acctMonthFilter" style="width:auto;padding:6px 12px;font-size:15px;min-height:auto;" />
+                        </div>
+                    </div>
+                    <div id="acctList"><div class="empty-state">还没有记账记录</div></div>
+                </div>
+            </div>
+
+            <!-- 待办 -->
+            <div class="page" id="page-todo">
+                <div class="card">
+                    <div class="card-title">✏️ 添加待办</div>
+                    <div class="row">
+                        <input type="text" id="todoInput" placeholder="要做什么？" />
+                        <button class="btn btn-primary" id="todoAddBtn">添加</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📋 待办列表</div>
+                    <div id="todoList"><div class="empty-state">还没有待办事项</div></div>
+                </div>
+            </div>
+
+            <!-- 生日 -->
+            <div class="page" id="page-birthday">
+                <div class="card">
+                    <div class="card-title">🎂 添加家人</div>
+                    <div class="row">
+                        <input type="text" id="birthdayName" placeholder="姓名" />
+                        <input type="date" id="birthdayDate" />
+                    </div>
+                    <button class="btn btn-primary" id="birthdayAddBtn" style="margin-top:10px;">添加</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">👨‍👩‍👧‍👦 家人列表</div>
+                    <div id="birthdayList"><div class="empty-state">还没有添加家人</div></div>
+                </div>
+            </div>
+
+            <!-- 健康 -->
+            <div class="page" id="page-health">
+                <div class="card">
+                    <div class="card-title">❤️ 记录健康数据</div>
+                    <div class="row">
+                        <input type="number" id="healthSystolic" placeholder="收缩压 (高压)" step="1" />
+                        <input type="number" id="healthDiastolic" placeholder="舒张压 (低压)" step="1" />
+                    </div>
+                    <input type="number" id="healthBloodSugar" placeholder="血糖 (mmol/L)" step="0.1" style="margin-top:10px;" />
+                    <input type="date" id="healthDate" style="margin-top:10px;" />
+                    <button class="btn btn-primary" id="healthSaveBtn" style="margin-top:10px;">保存记录</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">📊 健康记录</div>
+                    <div id="healthList"><div class="empty-state">还没有健康数据</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  1. 数据层 (localStorage)
+        // ================================================================
+        const STORAGE_KEY = 'mama_workbench_data';
+
+        function getDefaultData() {
+            return {
+                accounting: [], // { id, amount, type, category, date }
+                todos: [], // { id, text, done, createdAt }
+                birthdays: [], // { id, name, date }
+                health: [], // { id, systolic, diastolic, bloodSugar, date }
+            };
+        }
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    // 保证所有字段存在
+                    const def = getDefaultData();
+                    for (const key in def) {
+                        if (!(key in data)) data[key] = def[key];
+                    }
+                    return data;
+                }
+            } catch (e) { /* ignore */ }
+            return getDefaultData();
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        // ================================================================
+        //  2. 全局状态
+        // ================================================================
+        let appData = loadData();
+        let currentPage = 'home';
+
+        // ================================================================
+        //  3. 工具函数
+        // ================================================================
+        function genId() {
+            return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+        }
+
+        function formatDate(d) {
+            if (!d) return '';
+            const parts = d.split('-');
+            return parts[0] + '年' + parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
+        }
+
+        function getMonthStart(dateStr) {
+            if (!dateStr) return '';
+            return dateStr.slice(0, 7);
+        }
+
+        function getToday() {
+            const d = new Date();
+            return d.getFullYear() + '-' +
+                String(d.getMonth() + 1).padStart(2, '0') + '-' +
+                String(d.getDate()).padStart(2, '0');
+        }
+
+        function getCurrentMonth() {
+            const d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        }
+
+        function getDaysUntil(birthdayStr) {
+            // 计算下一个生日还有多少天
+            const today = new Date();
+            const [y, m, d] = birthdayStr.split('-').map(Number);
+            let next = new Date(today.getFullYear(), m - 1, d);
+            if (next < today) {
+                next = new Date(today.getFullYear() + 1, m - 1, d);
+            }
+            const diff = Math.ceil((next - today) / (1000 * 60 * 60 * 24));
+            return diff;
+        }
+
+        // ================================================================
+        //  4. 渲染函数
+        // ================================================================
+
+        // ---- 4.1 首页 ----
+        function renderHome() {
+            const now = getCurrentMonth();
+            const accts = appData.accounting.filter(a => a.date && a.date.startsWith(now));
+            let income = 0,
+                expense = 0;
+            accts.forEach(a => {
+                if (a.type === 'income') income += a.amount;
+                else expense += a.amount;
+            });
+            const balance = income - expense;
+            const todoUndone = appData.todos.filter(t => !t.done).length;
+
+            document.getElementById('homeIncome').textContent = income.toFixed(0);
+            document.getElementById('homeExpense').textContent = expense.toFixed(0);
+            document.getElementById('homeBalance').textContent = balance.toFixed(0);
+            document.getElementById('homeTodoCount').textContent = todoUndone;
+
+            // 近期生日 (接下来30天内)
+            const today = getToday();
+            const upcoming = appData.birthdays
+                .map(b => ({ ...b, days: getDaysUntil(b.date) }))
+                .filter(b => b.days >= 0 && b.days <= 30)
+                .sort((a, b) => a.days - b.days);
+
+            const birthContainer = document.getElementById('homeBirthdays');
+            if (upcoming.length === 0) {
+                birthContainer.innerHTML = '<div class="empty-state">近期没有生日 🎉</div>';
+            } else {
+                birthContainer.innerHTML = upcoming.map(b =>
+                    `<div class="birthday-highlight">🎂 ${b.name} · ${formatDate(b.date)} · 还有 ${b.days} 天</div>`
+                ).join('');
+            }
+
+            // 最近健康 (最新一条)
+            const healthContainer = document.getElementById('homeHealth');
+            if (appData.health.length === 0) {
+                healthContainer.innerHTML = '<div class="empty-state">暂无健康数据</div>';
+            } else {
+                const last = appData.health[appData.health.length - 1];
+                let parts = [];
+                if (last.systolic && last.diastolic) {
+                    parts.push(`血压 ${last.systolic}/${last.diastolic} mmHg`);
+                }
+                if (last.bloodSugar) {
+                    parts.push(`血糖 ${last.bloodSugar} mmol/L`);
+                }
+                healthContainer.innerHTML = `
+                    <div class="list-item">
+                        <div class="info">
+                            <div class="main">📅 ${formatDate(last.date)}</div>
+                            <div class="sub">${parts.join(' · ') || '无详细数据'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // ---- 4.2 记账 ----
+        function renderAccounting() {
+            const monthFilter = document.getElementById('acctMonthFilter').value || getCurrentMonth();
+            const filtered = appData.accounting
+                .filter(a => a.date && a.date.startsWith(monthFilter))
+                .sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+
+            const container = document.getElementById('acctList');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state">这个月还没有记账记录</div>';
+                return;
+            }
+
+            let incomeSum = 0,
+                expenseSum = 0;
+            let html = '';
+            filtered.forEach(a => {
+                if (a.type === 'income') incomeSum += a.amount;
+                else expenseSum += a.amount;
+                const tagClass = a.type === 'income' ? 'tag-income' : 'tag-expense';
+                const sign = a.type === 'income' ? '+' : '-';
+                html += `
+                    <div class="list-item">
+                        <div class="info">
+                            <div class="main">${a.category || '未分类'} <span class="tag ${tagClass}">${a.type === 'income' ? '收入' : '支出'}</span></div>
+                            <div class="sub">${formatDate(a.date)}</div>
+                        </div>
+                        <div style="font-size:20px;font-weight:600;color:${a.type === 'income' ? '#3a8a4a' : '#c05a4a'};">
+                            ${sign}${a.amount.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            });
+
+            // 在列表上方加一个小汇总
+            const summary = `
+                <div style="display:flex;gap:16px;padding-bottom:12px;margin-bottom:12px;border-bottom:2px solid var(--border-color);font-size:16px;">
+                    <span>💰 收入: <strong style="color:#3a8a4a;">${incomeSum.toFixed(2)}</strong></span>
+                    <span>💸 支出: <strong style="color:#c05a4a;">${expenseSum.toFixed(2)}</strong></span>
+                    <span>📊 结余: <strong>${(incomeSum - expenseSum).toFixed(2)}</strong></span>
+                </div>
+            `;
+            container.innerHTML = summary + html;
+        }
+
+        // ---- 4.3 待办 ----
+        function renderTodos() {
+            const container = document.getElementById('todoList');
+            const todos = appData.todos.sort((a, b) => {
+                if (a.done !== b.done) return a.done ? 1 : -1;
+                return b.createdAt - a.createdAt;
+            });
+
+            if (todos.length === 0) {
+                container.innerHTML = '<div class="empty-state">还没有待办事项</div>';
+                return;
+            }
+
+            container.innerHTML = todos.map(t => `
+                <div class="list-item" data-id="${t.id}">
+                    <div class="info">
+                        <div class="main" style="${t.done ? 'text-decoration:line-through;color:var(--text-muted);' : ''}">
+                            ${t.done ? '✅' : '⬜'} ${t.text}
+                        </div>
+                    </div>
+                    <div class="actions">
+                        ${!t.done ? `<button class="btn btn-sm btn-primary" data-action="todo-done">完成</button>` : ''}
+                        <button class="btn btn-sm btn-danger" data-action="todo-delete">删除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ---- 4.4 生日 ----
+        function renderBirthdays() {
+            const container = document.getElementById('birthdayList');
+            if (appData.birthdays.length === 0) {
+                container.innerHTML = '<div class="empty-state">还没有添加家人</div>';
+                return;
+            }
+
+            const sorted = [...appData.birthdays].sort((a, b) => a.date.localeCompare(b.date));
+            container.innerHTML = sorted.map(b => {
+                const days = getDaysUntil(b.date);
+                let badge = '';
+                if (days === 0) badge = ' 🎉 今天！';
+                else if (days <= 7) badge = ` 🌟 ${days}天后`;
+                return `
+                    <div class="list-item" data-id="${b.id}">
+                        <div class="info">
+                            <div class="main">${b.name} ${badge}</div>
+                            <div class="sub">${formatDate(b.date)}</div>
+                        </div>
+                        <button class="btn btn-sm btn-danger" data-action="birthday-delete">删除</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ---- 4.5 健康 ----
+        function renderHealth() {
+            const container = document.getElementById('healthList');
+            if (appData.health.length === 0) {
+                container.innerHTML = '<div class="empty-state">还没有健康数据</div>';
+                return;
+            }
+
+            const sorted = [...appData.health].sort((a, b) => b.date.localeCompare(a.date) || b.id.localeCompare(a.id));
+            container.innerHTML = sorted.map(h => {
+                let parts = [];
+                if (h.systolic && h.diastolic) {
+                    parts.push(`血压 ${h.systolic}/${h.diastolic} mmHg`);
+                }
+                if (h.bloodSugar) {
+                    parts.push(`血糖 ${h.bloodSugar} mmol/L`);
+                }
+                return `
+                    <div class="list-item" data-id="${h.id}">
+                        <div class="info">
+                            <div class="main">📅 ${formatDate(h.date)}</div>
+                            <div class="sub">${parts.join(' · ') || '无详细数据'}</div>
+                        </div>
+                        <button class="btn btn-sm btn-danger" data-action="health-delete">删除</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ---- 4.6 统一渲染 ----
+        function renderAll() {
+            renderHome();
+            renderAccounting();
+            renderTodos();
+            renderBirthdays();
+            renderHealth();
+        }
+
+        // ================================================================
+        //  5. 事件绑定与交互
+        // ================================================================
+
+        // ---- 5.1 导航切换 ----
+        document.querySelectorAll('#navTabs button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const page = this.dataset.page;
+                // 更新按钮状态
+                document.querySelectorAll('#navTabs button').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                // 更新页面
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                const target = document.getElementById('page-' + page);
+                if (target) target.classList.add('active');
+                currentPage = page;
+                // 重新渲染对应页面（有些页面依赖可见时的数据）
+                if (page === 'accounting') renderAccounting();
+                if (page === 'todo') renderTodos();
+                if (page === 'birthday') renderBirthdays();
+                if (page === 'health') renderHealth();
+                if (page === 'home') renderHome();
+            });
+        });
+
+        // ---- 5.2 深色模式切换 ----
+        const themeToggle = document.getElementById('themeToggle');
+        let darkMode = false;
+        themeToggle.addEventListener('click', function() {
+            darkMode = !darkMode;
+            document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+            this.textContent = darkMode ? '☀️ 浅色' : '🌙 暗色';
+        });
+
+        // ---- 5.3 记账 ----
+        document.getElementById('acctSaveBtn').addEventListener('click', function() {
+            const amount = parseFloat(document.getElementById('acctAmount').value);
+            const type = document.getElementById('acctType').value;
+            const category = document.getElementById('acctCategory').value.trim() || '未分类';
+            let date = document.getElementById('acctDate').value;
+            if (!date) date = getToday();
+
+            if (isNaN(amount) || amount <= 0) {
+                alert('请输入有效的金额');
+                return;
+            }
+
+            appData.accounting.push({
+                id: genId(),
+                amount: amount,
+                type: type,
+                category: category,
+                date: date
+            });
+            saveData(appData);
+            renderAccounting();
+            renderHome();
+            // 清空部分字段
+            document.getElementById('acctAmount').value = '';
+            document.getElementById('acctCategory').value = '';
+            // 保留日期方便连续记账
+        });
+
+        // 记账月份筛选
+        document.getElementById('acctMonthFilter').addEventListener('change', renderAccounting);
+        // 默认设置为当前月份
+        document.getElementById('acctMonthFilter').value = getCurrentMonth();
+
+        // ---- 5.4 待办 ----
+        document.getElementById('todoAddBtn').addEventListener('click', function() {
+            const input = document.getElementById('todoInput');
+            const text = input.value.trim();
+            if (!text) {
+                alert('请输入待办内容');
+                return;
+            }
+            appData.todos.push({
+                id: genId(),
+                text: text,
+                done: false,
+                createdAt: Date.now()
+            });
+            saveData(appData);
+            renderTodos();
+            renderHome();
+            input.value = '';
+        });
+        // 回车添加待办
+        document.getElementById('todoInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') document.getElementById('todoAddBtn').click();
+        });
+
+        // 待办列表事件委托 (完成/删除)
+        document.getElementById('todoList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            const item = target.closest('.list-item');
+            if (!item) return;
+            const id = item.dataset.id;
+            const action = target.dataset.action;
+
+            if (action === 'todo-done') {
+                const todo = appData.todos.find(t => t.id === id);
+                if (todo) todo.done = true;
+                saveData(appData);
+                renderTodos();
+                renderHome();
+            } else if (action === 'todo-delete') {
+                if (confirm('确定删除这条待办吗？')) {
+                    appData.todos = appData.todos.filter(t => t.id !== id);
+                    saveData(appData);
+                    renderTodos();
+                    renderHome();
+                }
+            }
+        });
+
+        // ---- 5.5 生日 ----
+        document.getElementById('birthdayAddBtn').addEventListener('click', function() {
+            const name = document.getElementById('birthdayName').value.trim();
+            const date = document.getElementById('birthdayDate').value;
+            if (!name) {
+                alert('请输入姓名');
+                return;
+            }
+            if (!date) {
+                alert('请选择生日日期');
+                return;
+            }
+            appData.birthdays.push({
+                id: genId(),
+                name: name,
+                date: date
+            });
+            saveData(appData);
+            renderBirthdays();
+            renderHome();
+            document.getElementById('birthdayName').value = '';
+            document.getElementById('birthdayDate').value = '';
+        });
+
+        // 生日列表事件委托 (删除)
+        document.getElementById('birthdayList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            if (target.dataset.action === 'birthday-delete') {
+                const item = target.closest('.list-item');
+                if (!item) return;
+                const id = item.dataset.id;
+                if (confirm('确定删除这位家人吗？')) {
+                    appData.birthdays = appData.birthdays.filter(b => b.id !== id);
+                    saveData(appData);
+                    renderBirthdays();
+                    renderHome();
+                }
+            }
+        });
+
+        // ---- 5.6 健康 ----
+        document.getElementById('healthSaveBtn').addEventListener('click', function() {
+            const systolic = parseInt(document.getElementById('healthSystolic').value);
+            const diastolic = parseInt(document.getElementById('healthDiastolic').value);
+            const bloodSugar = parseFloat(document.getElementById('healthBloodSugar').value);
+            let date = document.getElementById('healthDate').value;
+            if (!date) date = getToday();
+
+            if (isNaN(systolic) && isNaN(diastolic) && isNaN(bloodSugar)) {
+                alert('请至少填写一项健康数据');
+                return;
+            }
+
+            appData.health.push({
+                id: genId(),
+                systolic: isNaN(systolic) ? null : systolic,
+                diastolic: isNaN(diastolic) ? null : diastolic,
+                bloodSugar: isNaN(bloodSugar) ? null : bloodSugar,
+                date: date
+            });
+            saveData(appData);
+            renderHealth();
+            renderHome();
+            document.getElementById('healthSystolic').value = '';
+            document.getElementById('healthDiastolic').value = '';
+            document.getElementById('healthBloodSugar').value = '';
+        });
+
+        // 健康列表事件委托 (删除)
+        document.getElementById('healthList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            if (target.dataset.action === 'health-delete') {
+                const item = target.closest('.list-item');
+                if (!item) return;
+                const id = item.dataset.id;
+                if (confirm('确定删除这条健康记录吗？')) {
+                    appData.health = appData.health.filter(h => h.id !== id);
+                    saveData(appData);
+                    renderHealth();
+                    renderHome();
+                }
+            }
+        });
+
+        // ================================================================
+        //  6. 初始化
+        // ================================================================
+        // 设置默认日期
+        const todayStr = getToday();
+        document.getElementById('acctDate').value = todayStr;
+        document.getElementById('healthDate').value = todayStr;
+
+        renderAll();
+        console.log('🌷 妈妈的工作台已启动！数据已加载。');
+    </script>
+</body>
+</html>
