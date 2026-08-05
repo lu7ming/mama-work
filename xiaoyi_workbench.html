@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes" />
+    <title>🌿 小姨的工作台 · 禅意花园</title>
+    <link rel="manifest" id="manifestLink" />
+    <style>
+        /* ========== CSS 变量 — 禅意自然风 ========== */
+        :root {
+            --bg-body: #f5f0e8;
+            --bg-card: #ffffff;
+            --bg-input: #faf8f4;
+            --bg-nav: #e8f0e8;
+            --bg-btn: #d4dcc8;
+            --bg-btn-hover: #c8d4b8;
+            --bg-primary: #8aaa7a;
+            --bg-primary-hover: #7a9a6a;
+            --text-primary: #3a4a3a;
+            --text-secondary: #6a7a6a;
+            --text-muted: #aabaaa;
+            --border-color: #e0e8d8;
+            --shadow-color: rgba(120, 140, 110, 0.10);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --font-size-base: 18px;
+            --transition: 0.25s ease;
+            --color-lotus: #e8d4e0;
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #1a221a;
+            --bg-card: #2a342a;
+            --bg-input: #3a443a;
+            --bg-nav: #2a342a;
+            --bg-btn: #3a4a3a;
+            --bg-btn-hover: #4a5a4a;
+            --bg-primary: #6a8a5a;
+            --bg-primary-hover: #5a7a4a;
+            --text-primary: #e0e8d8;
+            --text-secondary: #b0c0b0;
+            --text-muted: #708070;
+            --border-color: #4a5a4a;
+            --shadow-color: rgba(0, 0, 0, 0.25);
+            --color-lotus: #5a4a5a;
+        }
+
+        /* ========== 全局重置 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Noto Serif SC", serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            font-size: var(--font-size-base);
+            line-height: 1.7;
+            padding: 0 0 80px 0;
+            transition: background var(--transition), color var(--transition);
+            min-height: 100vh;
+            padding-top: 12px;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 14px;
+        }
+
+        /* ========== 顶栏 ========== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 4px 14px 4px;
+            flex-wrap: wrap;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            color: var(--text-primary);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: var(--bg-nav);
+            border: none;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-size: 15px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background var(--transition);
+            box-shadow: 0 2px 8px var(--shadow-color);
+            min-height: 44px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-btn-hover);
+        }
+
+        /* ========== 农历 & 问候 ========== */
+        .greeting {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px var(--shadow-color);
+            transition: background var(--transition);
+            border-left: 4px solid var(--bg-primary);
+        }
+
+        .greeting .line1 {
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        .greeting .line2 {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .greeting .line2 .lunar {
+            background: var(--bg-nav);
+            padding: 2px 14px;
+            border-radius: 40px;
+            font-size: 15px;
+            display: inline-block;
+        }
+
+        /* ========== 底部导航 (手机优先) ========== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 6px 0 env(safe-area-inset-bottom, 6px) 0;
+            box-shadow: 0 -4px 20px var(--shadow-color);
+            z-index: 100;
+            transition: background var(--transition), border var(--transition);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .bottom-nav button {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 500;
+            padding: 6px 0;
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            min-height: 56px;
+            font-family: inherit;
+            border-radius: 0;
+            position: relative;
+        }
+
+        .bottom-nav button .nav-icon {
+            font-size: 24px;
+            line-height: 1.2;
+        }
+
+        .bottom-nav button .nav-label {
+            font-size: 12px;
+        }
+
+        .bottom-nav button.active {
+            color: var(--bg-primary);
+        }
+
+        .bottom-nav button.active::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 30%;
+            right: 30%;
+            height: 3px;
+            background: var(--bg-primary);
+            border-radius: 0 0 4px 4px;
+        }
+
+        .bottom-nav button:hover {
+            color: var(--text-primary);
+        }
+
+        /* ========== 页面容器 ========== */
+        .page {
+            display: none;
+            padding-bottom: 16px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* ========== 卡片 ========== */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 18px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px var(--shadow-color);
+            transition: background var(--transition), box-shadow var(--transition);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .card-title .badge {
+            font-size: 14px;
+            font-weight: 400;
+            background: var(--bg-nav);
+            padding: 2px 14px;
+            border-radius: 40px;
+            color: var(--text-secondary);
+        }
+
+        /* ========== 表单元素 ========== */
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 17px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            background: var(--bg-input);
+            color: var(--text-primary);
+            transition: border var(--transition), background var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--bg-primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        .input-with-mic {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .input-with-mic input,
+        .input-with-mic select {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .mic-btn {
+            background: var(--bg-btn);
+            border: none;
+            border-radius: 50%;
+            width: 52px;
+            height: 52px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+
+        .mic-btn:hover {
+            background: var(--bg-btn-hover);
+            transform: scale(1.05);
+        }
+
+        .mic-btn.listening {
+            background: var(--color-lotus);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ========== 按钮 ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 24px;
+            font-size: 18px;
+            font-weight: 500;
+            border: none;
+            border-radius: 40px;
+            background: var(--bg-btn);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition);
+            min-height: 52px;
+            min-width: 80px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            font-family: inherit;
+        }
+
+        .btn:hover {
+            background: var(--bg-btn-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: var(--bg-primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--bg-primary-hover);
+        }
+
+        .btn-danger {
+            background: #e8c8c8;
+            color: #6a3a3a;
+        }
+
+        .btn-danger:hover {
+            background: #e0b8b8;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 15px;
+            min-height: 40px;
+            min-width: 50px;
+        }
+
+        .btn-success {
+            background: #c8dcc8;
+            color: #2a5a3a;
+        }
+
+        .btn-success:hover {
+            background: #b8d0b8;
+        }
+
+        .btn-secondary {
+            background: var(--bg-nav);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border-color);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--border-color);
+            box-shadow: none;
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-nav);
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .row>* {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        /* ========== 列表 ========== */
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+            transition: border var(--transition);
+            gap: 8px;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .list-item .info {
+            flex: 1;
+            margin-right: 8px;
+            min-width: 0;
+        }
+
+        .list-item .info .main {
+            font-size: 17px;
+            font-weight: 500;
+            word-break: break-word;
+        }
+
+        .list-item .info .sub {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .list-item .actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 40px;
+            font-size: 14px;
+            background: var(--bg-nav);
+            color: var(--text-secondary);
+        }
+
+        .tag-danger {
+            background: #f0d0d0;
+            color: #8a4a4a;
+        }
+
+        .tag-success {
+            background: #d0e8d0;
+            color: #2a6a3a;
+        }
+
+        .tag-warning {
+            background: #f0e8c8;
+            color: #8a7a3a;
+        }
+
+        .tag-primary {
+            background: var(--bg-primary);
+            color: #fff;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 10px;
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        /* ========== 统计网格 ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .stats-grid-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .stat-item {
+            background: var(--bg-input);
+            border-radius: var(--radius-sm);
+            padding: 14px 10px;
+            text-align: center;
+            transition: background var(--transition);
+        }
+
+        .stat-item .number {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .stat-item .number.income {
+            color: #3a8a4a;
+        }
+
+        .stat-item .number.expense {
+            color: #b05a4a;
+        }
+
+        .stat-item .number.warning {
+            color: #c07a2a;
+        }
+
+        .stat-item .number.lotus {
+            color: #b08aaa;
+        }
+
+        .stat-item .label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* ========== 仪表盘专用卡片 ========== */
+        .dash-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dash-item:last-child {
+            border-bottom: none;
+        }
+
+        .dash-item .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+        }
+
+        .dash-item .left .icon {
+            font-size: 24px;
+        }
+
+        .dash-item .right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dash-item .right .status {
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .dash-item .right .status.warning {
+            color: #c07a2a;
+            font-weight: 500;
+        }
+
+        .dash-item .right .status.success {
+            color: #3a8a4a;
+            font-weight: 500;
+        }
+
+        /* ========== 日历 ========== */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+        }
+
+        .calendar-grid .header {
+            font-weight: 600;
+            padding: 6px 0;
+            font-size: 15px;
+            color: var(--text-secondary);
+        }
+
+        .calendar-grid .day {
+            padding: 8px 0;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background var(--transition), color var(--transition);
+            font-size: 16px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-grid .day:hover {
+            background: var(--bg-nav);
+        }
+
+        .calendar-grid .day.selected {
+            background: var(--bg-primary);
+            color: #fff;
+        }
+
+        .calendar-grid .day.has-event {
+            font-weight: 700;
+            color: var(--bg-primary);
+        }
+
+        .calendar-grid .day.other-month {
+            color: var(--text-muted);
+        }
+
+        .calendar-grid .day.today {
+            border: 2px solid var(--bg-primary);
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .calendar-nav button {
+            font-size: 24px;
+            padding: 4px 16px;
+            color: var(--text-primary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            min-height: 44px;
+            min-width: 44px;
+            border-radius: 50%;
+        }
+
+        .calendar-nav button:hover {
+            background: var(--bg-nav);
+        }
+
+        .calendar-nav .month-label {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        /* ========== 禅修计时器 ========== */
+        .timer-display {
+            font-size: 48px;
+            font-weight: 300;
+            text-align: center;
+            padding: 16px 0;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+
+        .timer-controls .btn {
+            min-width: 100px;
+        }
+
+        /* ========== 其他 ========== */
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .mt-1 {
+            margin-top: 12px;
+        }
+
+        .mb-1 {
+            margin-bottom: 12px;
+        }
+
+        .gap-1 {
+            gap: 8px;
+        }
+
+        .text-muted {
+            color: var(--text-muted);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        /* 佛诞日特殊样式 */
+        .festival-highlight {
+            background: var(--color-lotus);
+            border-radius: var(--radius-sm);
+            padding: 10px 16px;
+            color: var(--text-primary);
+            font-weight: 500;
+            margin-top: 6px;
+        }
+
+        [data-theme="dark"] .festival-highlight {
+            background: #4a3a4a;
+            color: #f0e0e8;
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 420px) {
+            body {
+                padding-top: 8px;
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .greeting .line1 {
+                font-size: 19px;
+            }
+
+            .bottom-nav button .nav-label {
+                font-size: 11px;
+            }
+
+            .bottom-nav button .nav-icon {
+                font-size: 20px;
+            }
+
+            .stats-grid-3 {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 6px;
+            }
+
+            .stat-item .number {
+                font-size: 22px;
+            }
+
+            .timer-display {
+                font-size: 36px;
+            }
+
+            .btn {
+                font-size: 16px;
+                padding: 12px 18px;
+                min-height: 48px;
+            }
+
+            .mic-btn {
+                width: 46px;
+                height: 46px;
+                font-size: 20px;
+            }
+
+            .calendar-grid .day {
+                font-size: 14px;
+                padding: 6px 0;
+            }
+
+            .card {
+                padding: 14px 12px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stats-grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .bottom-nav button {
+                font-size: 11px;
+                min-height: 48px;
+            }
+
+            .bottom-nav button .nav-icon {
+                font-size: 18px;
+            }
+        }
+
+        /* ========== 滚动条美化 ========== */
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-body);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-primary);
+            border-radius: 20px;
+        }
+
+        /* ========== PWA 安装提示 ========== */
+        .install-banner {
+            display: none;
+            background: var(--bg-primary);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+            text-align: center;
+            font-size: 16px;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .install-banner.show {
+            display: flex;
+        }
+
+        .install-banner .btn {
+            background: #fff;
+            color: var(--bg-primary);
+            min-height: 40px;
+            padding: 8px 20px;
+            font-size: 15px;
+        }
+
+        .install-banner .btn:hover {
+            background: #f0f0f0;
+        }
+
+        .install-banner .close-banner {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        <!-- ========== 顶栏 ========== -->
+        <header class="header">
+            <h1>🌿 小姨的工作台</h1>
+            <div class="header-actions">
+                <button class="theme-toggle" id="themeToggle">🌙 暗色</button>
+            </div>
+        </header>
+
+        <!-- ========== PWA 安装提示 ========== -->
+        <div class="install-banner" id="installBanner">
+            <span>📱 添加到桌面，使用更方便</span>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <button class="btn" id="installBtn">安装</button>
+                <button class="close-banner" id="closeInstallBanner">✕</button>
+            </div>
+        </div>
+
+        <!-- ========== 问候 & 农历 ========== -->
+        <div class="greeting" id="greeting">
+            <div class="line1" id="greetingText">🌱 早上好，今天是个好日子</div>
+            <div class="line2">
+                <span class="lunar" id="lunarText">农历 三月十五</span>
+                <span style="margin-left:10px;color:var(--text-muted);" id="festivalText"></span>
+            </div>
+        </div>
+
+        <!-- ========== 页面容器 ========== -->
+        <div id="pageContainer">
+
+            <!-- ==================== 首页 仪表盘 ==================== -->
+            <div class="page active" id="page-home">
+                <div class="card">
+                    <div class="card-title">📊 今日概览</div>
+                    <div id="dashContent">
+                        <!-- 由 JS 动态渲染 -->
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📋 待办 <span class="badge" id="dashTodoBadge">0</span></div>
+                    <div id="dashTodoList"><div class="empty-state">暂无待办</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📅 近期提醒</div>
+                    <div id="dashReminders"><div class="empty-state">暂无近期提醒</div></div>
+                </div>
+                <!-- 快捷入口 -->
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+                    <button class="btn btn-secondary btn-sm" data-nav="garden">🌱 花园</button>
+                    <button class="btn btn-secondary btn-sm" data-nav="pet">🐾 宠物</button>
+                    <button class="btn btn-secondary btn-sm" data-nav="practice">🙏 修行</button>
+                </div>
+            </div>
+
+            <!-- ==================== 花园 ==================== -->
+            <div class="page" id="page-garden">
+                <div class="card">
+                    <div class="card-title">🌱 我的花园</div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+                        <button class="btn btn-sm btn-secondary garden-filter active" data-filter="all">全部</button>
+                        <button class="btn btn-sm btn-secondary garden-filter" data-filter="flower">🌸 花卉</button>
+                        <button class="btn btn-sm btn-secondary garden-filter" data-filter="vegetable">🥬 蔬菜</button>
+                        <button class="btn btn-sm btn-secondary garden-filter" data-filter="tree">🌳 树木</button>
+                    </div>
+                    <div class="input-with-mic" style="margin-bottom:10px;">
+                        <input type="text" id="gardenInput" placeholder="植物名称…" />
+                        <button class="mic-btn" data-target="gardenInput" title="语音输入">🎤</button>
+                    </div>
+                    <div class="row" style="margin-bottom:10px;">
+                        <select id="gardenType">
+                            <option value="flower">🌸 花卉</option>
+                            <option value="vegetable">🥬 蔬菜</option>
+                            <option value="tree">🌳 树木</option>
+                        </select>
+                        <input type="number" id="gardenWaterFreq" placeholder="浇水间隔(天)" style="min-width:80px;" />
+                    </div>
+                    <div class="row" style="margin-bottom:10px;">
+                        <input type="date" id="gardenLastWater" />
+                        <input type="date" id="gardenPlantDate" placeholder="种植日期" />
+                    </div>
+                    <button class="btn btn-primary" id="gardenAddBtn">➕ 添加植物</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">🌿 植物列表 <span class="badge" id="gardenCount">0</span></div>
+                    <div id="gardenList"><div class="empty-state">还没有植物，种点什么吧 🌱</div></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📝 花园日记</div>
+                    <textarea id="gardenDiary" placeholder="今天花园里发生了什么？发芽了？开花了？长虫了？" rows="3"></textarea>
+                    <button class="btn btn-sm btn-primary" id="gardenDiarySave" style="margin-top:8px;">保存日记</button>
+                    <div id="gardenDiaryList" style="margin-top:10px;"></div>
+                </div>
+            </div>
+
+            <!-- ==================== 宠物 ==================== -->
+            <div class="page" id="page-pet">
+                <div class="card">
+                    <div class="card-title">🐾 我的毛孩子</div>
+                    <div class="input-with-mic" style="margin-bottom:10px;">
+                        <input type="text" id="petNameInput" placeholder="宠物名字" />
+                        <button class="mic-btn" data-target="petNameInput" title="语音输入">🎤</button>
+                    </div>
+                    <div class="row" style="margin-bottom:10px;">
+                        <select id="petTypeSelect">
+                            <option value="猫">🐱 猫</option>
+                            <option value="狗">🐶 狗</option>
+                            <option value="鸟">🐦 鸟</option>
+                            <option value="兔">🐰 兔</option>
+                            <option value="仓鼠">🐹 仓鼠</option>
+                            <option value="其他">其他</option>
+                        </select>
+                        <input type="date" id="petBirthday" />
+                    </div>
+                    <button class="btn btn-primary" id="petAddBtn">➕ 添加宠物</button>
+                </div>
+                <div id="petListContainer">
+                    <!-- 由 JS 动态渲染 -->
+                </div>
+            </div>
+
+            <!-- ==================== 修行 ==================== -->
+            <div class="page" id="page-practice">
+                <div class="card">
+                    <div class="card-title">🙏 今日修行</div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+                        <select id="practiceType" style="flex:2;min-width:120px;">
+                            <option value="打坐">🧘 打坐</option>
+                            <option value="念佛">📿 念佛</option>
+                            <option value="诵经">📖 诵经</option>
+                            <option value="持咒">🔮 持咒</option>
+                            <option value="禅修">🌿 禅修</option>
+                            <option value="其他">其他</option>
+                        </select>
+                        <input type="number" id="practiceDuration" placeholder="分钟" style="flex:1;min-width:80px;" />
+                    </div>
+                    <div class="timer-display" id="timerDisplay">00:00</div>
+                    <div class="timer-controls">
+                        <button class="btn btn-primary" id="timerStartBtn">▶ 开始</button>
+                        <button class="btn btn-secondary" id="timerResetBtn">⟲ 重置</button>
+                    </div>
+                    <button class="btn btn-success" id="practiceSaveBtn" style="margin-top:12px;width:100%;">📿 记录这次修行</button>
+                </div>
+                <div class="card">
+                    <div class="card-title">📊 修行统计</div>
+                    <div class="stats-grid stats-grid-3" id="practiceStats">
+                        <div class="stat-item"><div class="number" id="pStatWeek">0</div><div class="label">本周次数</div></div>
+                        <div class="stat-item"><div class="number" id="pStatMonth">0</div><div class="label">本月次数</div></div>
+                        <div class="stat-item"><div class="number" id="pStatTotal">0</div><div class="label">总次数</div></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📋 功课清单</div>
+                    <div class="input-with-mic" style="margin-bottom:10px;">
+                        <input type="text" id="taskInput" placeholder="每日功课…" />
+                        <button class="mic-btn" data-target="taskInput" title="语音输入">🎤</button>
+                    </div>
+                    <button class="btn btn-primary btn-sm" id="taskAddBtn">添加功课</button>
+                    <div id="taskList" style="margin-top:10px;"></div>
+                </div>
+                <div class="card">
+                    <div class="card-title">📝 法喜笔记</div>
+                    <textarea id="noteInput" placeholder="记录修行感悟、梦境、心得体会…" rows="3"></textarea>
+                    <button class="btn btn-primary btn-sm" id="noteSaveBtn" style="margin-top:8px;">保存笔记</button>
+                    <div id="noteList" style="margin-top:10px;"></div>
+                </div>
+            </div>
+
+            <!-- ==================== 更多 (记账 + 待办 + 日历 + 设置) ==================== -->
+            <div class="page" id="page-more">
+                <!-- 记账 -->
+                <div class="card">
+                    <div class="card-title">💰 记账</div>
+                    <div class="stats-grid" style="margin-bottom:10px;">
+                        <div class="stat-item"><div class="number" id="moreMonthExpense">0</div><div class="label">本月支出</div></div>
+                        <div class="stat-item"><div class="number" id="moreMonthIncome">0</div><div class="label">本月收入</div></div>
+                    </div>
+                    <div class="row" style="margin-bottom:10px;">
+                        <input type="number" id="moneyAmount" placeholder="金额" step="0.01" />
+                        <select id="moneyType">
+                            <option value="expense">支出</option>
+                            <option value="income">收入</option>
+                        </select>
+                    </div>
+                    <div class="input-with-mic" style="margin-bottom:10px;">
+                        <input type="text" id="moneyCategory" placeholder="分类 (买菜/种子/宠物/日用…)" />
+                        <button class="mic-btn" data-target="moneyCategory" title="语音输入">🎤</button>
+                    </div>
+                    <button class="btn btn-primary" id="moneyAddBtn">记一笔</button>
+                    <div id="moneyList" style="margin-top:12px;"></div>
+                </div>
+
+                <!-- 待办 (快速) -->
+                <div class="card">
+                    <div class="card-title">📋 待办事项</div>
+                    <div class="input-with-mic" style="margin-bottom:10px;">
+                        <input type="text" id="todoMoreInput" placeholder="待办…" />
+                        <button class="mic-btn" data-target="todoMoreInput" title="语音输入">🎤</button>
+                    </div>
+                    <button class="btn btn-primary btn-sm" id="todoMoreAddBtn">添加</button>
+                    <div id="todoMoreList" style="margin-top:10px;"></div>
+                </div>
+
+                <!-- 日历 + 纪念日 -->
+                <div class="card">
+                    <div class="card-title">📅 日历 & 纪念日</div>
+                    <div class="calendar-nav">
+                        <button id="calPrev">‹</button>
+                        <span class="month-label" id="calLabel">2025年1月</span>
+                        <button id="calNext">›</button>
+                    </div>
+                    <div class="calendar-grid" id="calGrid"></div>
+                    <div style="margin-top:12px;">
+                        <div class="input-with-mic" style="margin-bottom:8px;">
+                            <input type="text" id="eventInput" placeholder="纪念日名称" />
+                            <button class="mic-btn" data-target="eventInput" title="语音输入">🎤</button>
+                        </div>
+                        <div class="row" style="margin-bottom:8px;">
+                            <input type="date" id="eventDate" />
+                            <select id="eventType">
+                                <option value="birthday">🎂 生日</option>
+                                <option value="buddha">🙏 佛诞日</option>
+                                <option value="pet">🐾 宠物生日</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary btn-sm" id="eventAddBtn">添加纪念日</button>
+                        <div id="eventList" style="margin-top:10px;"></div>
+                    </div>
+                </div>
+
+                <!-- 设置 -->
+                <div class="card">
+                    <div class="card-title">⚙️ 设置</div>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <button class="btn btn-secondary btn-sm" id="exportBtn">📥 导出数据</button>
+                        <button class="btn btn-secondary btn-sm" id="importBtn">📤 导入数据</button>
+                        <input type="file" id="fileInput" accept=".json" style="display:none;" />
+                    </div>
+                    <div style="margin-top:10px;font-size:15px;color:var(--text-muted);">
+                        <p>📌 所有数据保存在浏览器本地，导出备份可换设备恢复。</p>
+                        <p style="margin-top:4px;">🙏 愿一切众生平安喜乐</p>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /pageContainer -->
+
+        <!-- ========== 底部导航 ========== -->
+        <nav class="bottom-nav" id="bottomNav">
+            <button class="active" data-page="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">首页</span>
+            </button>
+            <button data-page="garden">
+                <span class="nav-icon">🌱</span>
+                <span class="nav-label">花园</span>
+            </button>
+            <button data-page="pet">
+                <span class="nav-icon">🐾</span>
+                <span class="nav-label">宠物</span>
+            </button>
+            <button data-page="practice">
+                <span class="nav-icon">🙏</span>
+                <span class="nav-label">修行</span>
+            </button>
+            <button data-page="more">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">更多</span>
+            </button>
+        </nav>
+    </div>
+
+    <script>
+        // ====================================================================
+        //  1. 数据层
+        // ====================================================================
+        const STORAGE_KEY = 'xiaoyi_workbench_v2';
+
+        function getDefaultData() {
+            return {
+                garden: [], // { id, name, type, waterFreq, lastWater, plantDate, createdAt }
+                gardenDiary: [], // { id, content, date }
+                pets: [], // { id, name, type, birthday, feedHistory: [], health: { weight, deworm, vaccine, notes } }
+                practice: [], // { id, type, duration, date, startTime }
+                tasks: [], // { id, text, done, createdAt }
+                notes: [], // { id, content, date }
+                money: [], // { id, amount, type, category, date }
+                events: [], // { id, name, date, type }
+                todos: [], // { id, text, done, createdAt }
+                // 兼容旧数据
+            };
+        }
+
+        function loadData() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const data = JSON.parse(raw);
+                    const def = getDefaultData();
+                    for (const key in def) {
+                        if (!(key in data)) data[key] = def[key];
+                    }
+                    return data;
+                }
+            } catch (e) { /* ignore */ }
+            return getDefaultData();
+        }
+
+        function saveData(data) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+
+        let appData = loadData();
+
+        // ====================================================================
+        //  2. 工具函数
+        // ====================================================================
+        function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+        function getToday() {
+            const d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2,
+                '0');
+        }
+
+        function getCurrentMonth() {
+            const d = new Date();
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+        }
+
+        function formatDate(d) {
+            if (!d) return '';
+            const parts = d.split('-');
+            return parts[0] + '年' + parseInt(parts[1]) + '月' + parseInt(parts[2]) + '日';
+        }
+
+        function formatDateShort(d) {
+            if (!d) return '';
+            const parts = d.split('-');
+            return parseInt(parts[1]) + '/' + parseInt(parts[2]);
+        }
+
+        function daysBetween(d1, d2) {
+            const a = new Date(d1);
+            const b = new Date(d2);
+            return Math.floor((a - b) / (1000 * 60 * 60 * 24));
+        }
+
+        function getWeekStart() {
+            const d = new Date();
+            const day = d.getDay();
+            const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+            const monday = new Date(d.getFullYear(), d.getMonth(), diff);
+            return monday.getFullYear() + '-' + String(monday.getMonth() + 1).padStart(2, '0') + '-' + String(monday
+            .getDate()).padStart(2, '0');
+        }
+
+        // ========== 农历 (简化版) ==========
+        const lunarInfo = [0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2, 0x04ae0,
+            0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977, 0x04970, 0x0a4b0, 0x0b4b5,
+            0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970, 0x06566, 0x0d4a0, 0x0ea50, 0x16a95, 0x05ad0,
+            0x02b60, 0x186e3, 0x092e0, 0x1c8d7, 0x0c950, 0x0d4a0, 0x1d8a6, 0x0b550, 0x056a0, 0x1a5b4, 0x025d0, 0x092d0,
+            0x0d2b2, 0x0a950, 0x0b557, 0x06ca0, 0x0b550, 0x15355, 0x04da0, 0x0a5d0, 0x14573, 0x052d0, 0x0a9a8, 0x0e950,
+            0x06aa0, 0x0aea6, 0x0ab50, 0x04b60, 0x0aae4, 0x0a570, 0x05260, 0x0f263, 0x0d950, 0x05b57, 0x056a0, 0x096d0,
+            0x04ddb, 0x04ad0, 0x0a4d0, 0x0d4d4, 0x0d250, 0x0d558, 0x0b540, 0x0b6a0, 0x195a6, 0x095b0, 0x049b0, 0x0a974,
+            0x0a4b0, 0x0b27a, 0x06a50, 0x06d40, 0x0af46, 0x0ab60, 0x09570, 0x04af5, 0x04970, 0x064b0, 0x074a3, 0x0ea50,
+            0x06b58, 0x055c0, 0x0ab60, 0x096d5, 0x092e0, 0x0c960, 0x0d954, 0x0d4a0, 0x0da50, 0x07552, 0x056a0, 0x0abb7,
+            0x025d0, 0x092d0, 0x0cab5, 0x0a950, 0x0b4a0, 0x0baa4, 0x0ad50, 0x055d9, 0x04ba0, 0x0a5b0, 0x15176, 0x052b0,
+            0x0a930, 0x07954, 0x06aa0, 0x0ad50, 0x05b52, 0x04b60, 0x0a6e6, 0x0a4e0, 0x0d260, 0x0ea65, 0x0d530, 0x05aa0,
+            0x076a3, 0x096d0, 0x04bd7, 0x04ad0, 0x0a4d0, 0x1d0b6, 0x0d250, 0x0d520, 0x0dd45, 0x0b5a0, 0x056d0, 0x055b2,
+            0x049b0, 0x0a577, 0x0a4b0, 0x0aa50, 0x1b255, 0x06d20, 0x0ada0
+        ];
+
+        function lunarYearDays(y) {
+            let sum = 348;
+            for (let i = 0x8000; i > 0x8; i >>= 1) { sum += (lunarInfo[y - 1900] & i) ? 1 : 0; }
+            return sum + leapDays(y);
+        }
+
+        function leapDays(y) { return (lunarInfo[y - 1900] & 0xf) ? 1 : 0; }
+
+        function leapMonth(y) { return lunarInfo[y - 1900] & 0xf ? (lunarInfo[y - 1900] & 0xf) : 0; }
+
+        function getLunarDate(d) {
+            const monthNames = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'];
+            const dayNames = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十', '十一', '十二', '十三', '十四', '十五',
+                '十六', '十七', '十八', '十九', '二十', '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'
+            ];
+            let [y, m, day] = [d.getFullYear(), d.getMonth() + 1, d.getDate()];
+            let leap = 0,
+                isLeap = false;
+            let base = new Date(y, 0, 1).getTime();
+            let offset = (d.getTime() - base) / 86400000 + 1;
+            let yearDays = lunarYearDays(y);
+            let lunarY = y,
+                lunarM = 1,
+                lunarD = 1;
+            if (offset > yearDays) {
+                offset -= yearDays;
+                lunarY = y + 1;
+                yearDays = lunarYearDays(lunarY);
+            }
+            for (let j = 0; j < 13; j++) {
+                let days = (j === leapMonth(lunarY) - 1 && leap) ? leapDays(lunarY) : (j === 0 ? 30 : 29);
+                if (offset <= days) {
+                    lunarM = j + 1;
+                    lunarD = offset;
+                    break;
+                }
+                offset -= days;
+                if (j === leapMonth(lunarY) - 1 && !leap) { leap = 1;
+                    j--; }
+            }
+            if (leap) isLeap = true;
+            return (isLeap ? '闰' : '') + monthNames[lunarM - 1] + '月' + dayNames[lunarD - 1];
+        }
+
+        function getLunarToday() {
+            const now = new Date();
+            return '农历 ' + getLunarDate(now);
+        }
+
+        // 佛诞日 (简化)
+        function getBuddhaDays() {
+            // 农历 2月19 观音诞, 4月8 佛诞, 6月19 观音成道, 7月15 盂兰盆, 9月19 观音出家, 12月8 佛成道
+            return [
+                { month: 2, day: 19, name: '观音菩萨诞辰' },
+                { month: 4, day: 8, name: '释迦牟尼佛诞' },
+                { month: 6, day: 19, name: '观音菩萨成道' },
+                { month: 7, day: 15, name: '盂兰盆节' },
+                { month: 9, day: 19, name: '观音菩萨出家' },
+                { month: 12, day: 8, name: '释迦牟尼佛成道' },
+            ];
+        }
+
+        // ====================================================================
+        //  3. 渲染引擎
+        // ====================================================================
+
+        // ---- 3.1 首页仪表盘 ----
+        function renderDashboard() {
+            const today = getToday();
+            // 待浇水
+            const needWater = appData.garden.filter(g => {
+                if (!g.waterFreq || !g.lastWater) return false;
+                const days = daysBetween(today, g.lastWater);
+                return days >= g.waterFreq;
+            });
+
+            // 宠物喂食
+            const pets = appData.pets;
+            const fedToday = pets.filter(p => {
+                const feeds = p.feedHistory || [];
+                return feeds.some(f => f === today);
+            });
+
+            // 今日修行
+            const todayPractice = appData.practice.filter(p => p.date === today);
+            const hasPractice = todayPractice.length > 0;
+            const totalPracticeMin = todayPractice.reduce((s, p) => s + (p.duration || 0), 0);
+
+            // 本月花费
+            const month = getCurrentMonth();
+            const monthMoney = appData.money.filter(m => m.date && m.date.startsWith(month));
+            let expense = 0,
+                income = 0;
+            monthMoney.forEach(m => {
+                if (m.type === 'income') income += m.amount;
+                else expense += m.amount;
+            });
+
+            // 待办
+            const undoneTodos = appData.todos.filter(t => !t.done);
+
+            // 近期纪念日
+            const todayObj = new Date();
+            const nearEvents = appData.events
+                .filter(e => {
+                    const d = new Date(e.date);
+                    const diff = Math.ceil((d - todayObj) / (1000 * 60 * 60 * 24));
+                    return diff >= -1 && diff <= 30;
+                })
+                .sort((a, b) => new Date(a.date) - new Date(b.date))
+                .slice(0, 5);
+
+            let html = `
+                <div class="dash-item">
+                    <div class="left"><span class="icon">🌱</span> 花园</div>
+                    <div class="right">
+                        <span class="status ${needWater.length > 0 ? 'warning' : 'success'}">
+                            ${needWater.length > 0 ? `${needWater.length}盆该浇水了` : '🌿 都浇过水了'}
+                        </span>
+                        <button class="btn btn-sm btn-secondary" data-nav="garden">查看</button>
+                    </div>
+                </div>
+                <div class="dash-item">
+                    <div class="left"><span class="icon">🐾</span> 毛孩子</div>
+                    <div class="right">
+                        <span class="status ${fedToday.length === pets.length && pets.length > 0 ? 'success' : 'warning'}">
+                            ${pets.length === 0 ? '还没有宠物' : `${fedToday.length}/${pets.length} 已喂`}
+                        </span>
+                        <button class="btn btn-sm btn-secondary" data-nav="pet">查看</button>
+                    </div>
+                </div>
+                <div class="dash-item">
+                    <div class="left"><span class="icon">🙏</span> 今日修行</div>
+                    <div class="right">
+                        <span class="status ${hasPractice ? 'success' : 'warning'}">
+                            ${hasPractice ? `已完成 ${totalPracticeMin}分钟` : '未开始'}
+                        </span>
+                        <button class="btn btn-sm btn-secondary" data-nav="practice">${hasPractice ? '继续' : '开始'}</button>
+                    </div>
+                </div>
+                <div class="dash-item">
+                    <div class="left"><span class="icon">💰</span> 本月花费</div>
+                    <div class="right">
+                        <span class="status">¥${expense.toFixed(0)} ${income > 0 ? `(收入 ¥${income.toFixed(0)})` : ''}</span>
+                        <button class="btn btn-sm btn-secondary" data-nav="more">明细</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('dashContent').innerHTML = html;
+
+            // 待办列表 (首页)
+            const todoContainer = document.getElementById('dashTodoList');
+            document.getElementById('dashTodoBadge').textContent = undoneTodos.length;
+            if (undoneTodos.length === 0) {
+                todoContainer.innerHTML = '<div class="empty-state">✨ 今天没有待办，好好休息</div>';
+            } else {
+                todoContainer.innerHTML = undoneTodos.slice(0, 5).map(t =>
+                    `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border-color);">
+                        <span>${t.text}</span>
+                        <button class="btn btn-sm btn-success" data-action="todo-done-home" data-id="${t.id}">✓ 完成</button>
+                    </div>`
+                ).join('');
+                if (undoneTodos.length > 5) {
+                    todoContainer.innerHTML +=
+                        `<div style="text-align:center;padding-top:6px;color:var(--text-muted);font-size:15px;">还有 ${undoneTodos.length - 5} 项…</div>`;
+                }
+            }
+
+            // 近期提醒
+            const remindContainer = document.getElementById('dashReminders');
+            if (nearEvents.length === 0 && needWater.length === 0) {
+                remindContainer.innerHTML = '<div class="empty-state">暂无近期提醒 🌸</div>';
+            } else {
+                let remindHtml = '';
+                nearEvents.forEach(e => {
+                    const diff = Math.ceil((new Date(e.date) - new Date()) / (1000 * 60 * 60 * 24));
+                    const label = diff === 0 ? '今天' : diff === 1 ? '明天' : `${diff}天后`;
+                    const emoji = e.type === 'birthday' ? '🎂' : e.type === 'buddha' ? '🙏' : e.type === 'pet' ? '🐾' : '📌';
+                    remindHtml +=
+                        `<div style="padding:4px 0;border-bottom:1px solid var(--border-color);">${emoji} ${e.name} · ${formatDate(e.date)} · ${label}</div>`;
+                });
+                if (needWater.length > 0) {
+                    remindHtml +=
+                        `<div style="padding:4px 0;color:#c07a2a;">💧 ${needWater.length}盆植物该浇水了</div>`;
+                }
+                remindContainer.innerHTML = remindHtml;
+            }
+
+            // 点击导航快捷
+            document.querySelectorAll('[data-nav]').forEach(el => {
+                el.addEventListener('click', function() {
+                    const page = this.dataset.nav;
+                    switchPage(page);
+                });
+            });
+        }
+
+        // ---- 3.2 花园 ----
+        let gardenFilter = 'all';
+
+        function renderGarden() {
+            const filtered = appData.garden.filter(g => {
+                if (gardenFilter === 'all') return true;
+                return g.type === gardenFilter;
+            });
+
+            document.getElementById('gardenCount').textContent = filtered.length;
+
+            const container = document.getElementById('gardenList');
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="empty-state">还没有植物，种点什么吧 🌱</div>';
+                return;
+            }
+
+            const today = getToday();
+            container.innerHTML = filtered.map(g => {
+                const needWater = g.waterFreq && g.lastWater && daysBetween(today, g.lastWater) >= g.waterFreq;
+                const typeEmoji = g.type === 'flower' ? '🌸' : g.type === 'vegetable' ? '🥬' : '🌳';
+                const waterStatus = needWater ?
+                    '<span class="tag tag-danger">💧 该浇水了</span>' :
+                    g.lastWater ? `<span class="tag tag-success">💧 ${daysBetween(today, g.lastWater)}天前</span>` :
+                    '<span class="tag">未记录</span>';
+                return `
+                    <div class="list-item" data-id="${g.id}">
+                        <div class="info">
+                            <div class="main">${typeEmoji} ${g.name}</div>
+                            <div class="sub">${g.type === 'flower' ? '花卉' : g.type === 'vegetable' ? '蔬菜' : '树木'} · 每${g.waterFreq||'?'}天浇一次 ${waterStatus}</div>
+                        </div>
+                        <div class="actions">
+                            <button class="btn btn-sm btn-primary" data-action="garden-water" data-id="${g.id}">💧 浇水</button>
+                            <button class="btn btn-sm btn-danger" data-action="garden-delete" data-id="${g.id}">✕</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // 花园日记
+            const diaryContainer = document.getElementById('gardenDiaryList');
+            const diaries = appData.gardenDiary.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+            if (diaries.length === 0) {
+                diaryContainer.innerHTML = '<div class="empty-state" style="padding:10px 0;">还没有日记</div>';
+            } else {
+                diaryContainer.innerHTML = diaries.map(d =>
+                    `<div style="padding:8px 0;border-bottom:1px solid var(--border-color);">
+                        <div style="font-size:15px;">${d.content}</div>
+                        <div style="font-size:14px;color:var(--text-muted);">${formatDate(d.date)}</div>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        // ---- 3.3 宠物 ----
+        function renderPets() {
+            const container = document.getElementById('petListContainer');
+            if (appData.pets.length === 0) {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="empty-state">还没有宠物，添加一只毛孩子吧 🐾</div>
+                    </div>
+                `;
+                return;
+            }
+
+            const today = getToday();
+            container.innerHTML = appData.pets.map(p => {
+                const feeds = p.feedHistory || [];
+                const fedToday = feeds.some(f => f === today);
+                return `
+                    <div class="card" data-id="${p.id}">
+                        <div class="flex-between">
+                            <div>
+                                <span style="font-size:22px;font-weight:500;">${p.name}</span>
+                                <span class="tag">${p.type}</span>
+                                ${p.birthday ? `<span class="tag">🎂 ${formatDate(p.birthday)}</span>` : ''}
+                            </div>
+                            <div>
+                                <span class="status ${fedToday ? 'success' : 'warning'}">
+                                    ${fedToday ? '✅ 已喂' : '⭕ 未喂'}
+                                </span>
+                            </div>
+                        </div>
+                        <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+                            <button class="btn btn-sm ${fedToday ? 'btn-success' : 'btn-primary'}" data-action="pet-feed" data-id="${p.id}">
+                                ${fedToday ? '已喂' : '🍖 喂食'}
+                            </button>
+                            <button class="btn btn-sm btn-secondary" data-action="pet-health" data-id="${p.id}">❤️ 健康</button>
+                            <button class="btn btn-sm btn-danger" data-action="pet-delete" data-id="${p.id}">✕</button>
+                        </div>
+                        <div style="margin-top:6px;font-size:15px;color:var(--text-muted);">
+                            ${p.health && p.health.notes ? `📝 ${p.health.notes}` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ---- 3.4 修行 ----
+        function renderPractice() {
+            const today = getToday();
+            const weekStart = getWeekStart();
+            const month = getCurrentMonth();
+
+            const weekPractices = appData.practice.filter(p => p.date >= weekStart);
+            const monthPractices = appData.practice.filter(p => p.date && p.date.startsWith(month));
+
+            document.getElementById('pStatWeek').textContent = weekPractices.length;
+            document.getElementById('pStatMonth').textContent = monthPractices.length;
+            document.getElementById('pStatTotal').textContent = appData.practice.length;
+
+            // 功课
+            const taskContainer = document.getElementById('taskList');
+            const tasks = appData.tasks.sort((a, b) => {
+                if (a.done !== b.done) return a.done ? 1 : -1;
+                return a.createdAt - b.createdAt;
+            });
+            if (tasks.length === 0) {
+                taskContainer.innerHTML = '<div class="empty-state">还没有设定功课</div>';
+            } else {
+                taskContainer.innerHTML = tasks.map(t =>
+                    `<div class="list-item" data-id="${t.id}">
+                        <div class="info">
+                            <div class="main" style="${t.done ? 'text-decoration:line-through;color:var(--text-muted);' : ''}">
+                                ${t.done ? '✅' : '⬜'} ${t.text}
+                            </div>
+                        </div>
+                        <div class="actions">
+                            ${!t.done ? `<button class="btn btn-sm btn-success" data-action="task-done" data-id="${t.id}">完成</button>` : ''}
+                            <button class="btn btn-sm btn-danger" data-action="task-delete" data-id="${t.id}">✕</button>
+                        </div>
+                    </div>`
+                ).join('');
+            }
+
+            // 法喜笔记
+            const noteContainer = document.getElementById('noteList');
+            const notes = appData.notes.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+            if (notes.length === 0) {
+                noteContainer.innerHTML = '<div class="empty-state">还没有笔记</div>';
+            } else {
+                noteContainer.innerHTML = notes.map(n =>
+                    `<div style="padding:8px 0;border-bottom:1px solid var(--border-color);">
+                        <div style="font-size:15px;">${n.content}</div>
+                        <div style="font-size:14px;color:var(--text-muted);">${formatDate(n.date)}</div>
+                    </div>`
+                ).join('');
+            }
+
+            // 佛诞日提醒
+            const buddhaDays = getBuddhaDays();
+            const todayLunar = getLunarDate(new Date());
+            // 简略显示
+            const festivalContainer = document.getElementById('festivalText');
+            // 在问候区域已显示
+        }
+
+        // ---- 3.5 更多 (记账 + 待办 + 日历 + 纪念日) ----
+        function renderMore() {
+            renderMoney();
+            renderTodoMore();
+            renderCalendar();
+            renderEvents();
+        }
+
+        function renderMoney() {
+            const month = getCurrentMonth();
+            const monthMoney = appData.money.filter(m => m.date && m.date.startsWith(month));
+            let expense = 0,
+                income = 0;
+            monthMoney.forEach(m => {
+                if (m.type === 'income') income += m.amount;
+                else expense += m.amount;
+            });
+            document.getElementById('moreMonthExpense').textContent = '¥' + expense.toFixed(0);
+            document.getElementById('moreMonthIncome').textContent = '¥' + income.toFixed(0);
+
+            const container = document.getElementById('moneyList');
+            const sorted = [...monthMoney].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 20);
+            if (sorted.length === 0) {
+                container.innerHTML = '<div class="empty-state">本月暂无记账</div>';
+            } else {
+                container.innerHTML = sorted.map(m =>
+                    `<div class="list-item">
+                        <div class="info">
+                            <div class="main">${m.category || '未分类'} <span class="tag ${m.type === 'income' ? 'tag-success' : 'tag-danger'}">${m.type === 'income' ? '收入' : '支出'}</span></div>
+                            <div class="sub">${formatDate(m.date)}</div>
+                        </div>
+                        <div style="font-size:18px;font-weight:600;color:${m.type === 'income' ? '#3a8a4a' : '#b05a4a'};">
+                            ${m.type === 'income' ? '+' : '-'}${m.amount.toFixed(2)}
+                        </div>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        function renderTodoMore() {
+            const container = document.getElementById('todoMoreList');
+            const todos = appData.todos.sort((a, b) => {
+                if (a.done !== b.done) return a.done ? 1 : -1;
+                return a.createdAt - b.createdAt;
+            });
+            if (todos.length === 0) {
+                container.innerHTML = '<div class="empty-state">暂无待办</div>';
+            } else {
+                container.innerHTML = todos.map(t =>
+                    `<div class="list-item" data-id="${t.id}">
+                        <div class="info">
+                            <div class="main" style="${t.done ? 'text-decoration:line-through;color:var(--text-muted);' : ''}">
+                                ${t.done ? '✅' : '⬜'} ${t.text}
+                            </div>
+                        </div>
+                        <div class="actions">
+                            ${!t.done ? `<button class="btn btn-sm btn-success" data-action="todo-done-more" data-id="${t.id}">完成</button>` : ''}
+                            <button class="btn btn-sm btn-danger" data-action="todo-delete-more" data-id="${t.id}">✕</button>
+                        </div>
+                    </div>`
+                ).join('');
+            }
+        }
+
+        // ---- 日历 ----
+        let calYear = new Date().getFullYear();
+        let calMonth = new Date().getMonth() + 1;
+
+        function renderCalendar() {
+            const year = calYear,
+                month = calMonth;
+            const firstDay = new Date(year, month - 1, 1).getDay();
+            const daysInMonth = new Date(year, month, 0).getDate();
+
+            document.getElementById('calLabel').textContent = year + '年' + month + '月';
+
+            let html = '';
+            ['日', '一', '二', '三', '四', '五', '六'].forEach(d => {
+                html += `<div class="header">${d}</div>`;
+            });
+
+            // 填充空白
+            for (let i = 0; i < firstDay; i++) {
+                html += `<div class="day other-month"></div>`;
+            }
+
+            const today = getToday();
+            const events = appData.events;
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateStr = year + '-' + String(month).padStart(2, '0') + '-' + String(i).padStart(2, '0');
+                const isToday = dateStr === today;
+                const hasEvent = events.some(e => e.date === dateStr);
+                let cls = 'day';
+                if (isToday) cls += ' today';
+                if (hasEvent) cls += ' has-event';
+                html += `<div class="${cls}" data-date="${dateStr}">${i}</div>`;
+            }
+
+            document.getElementById('calGrid').innerHTML = html;
+        }
+
+        function renderEvents() {
+            const container = document.getElementById('eventList');
+            const sorted = [...appData.events].sort((a, b) => a.date.localeCompare(b.date));
+            if (sorted.length === 0) {
+                container.innerHTML = '<div class="empty-state">暂无纪念日</div>';
+            } else {
+                const now = new Date();
+                container.innerHTML = sorted.map(e => {
+                    const diff = Math.ceil((new Date(e.date) - now) / (1000 * 60 * 60 * 24));
+                    const label = diff === 0 ? '今天' : diff === 1 ? '明天' : diff > 0 ? `${diff}天后` : `${-diff}天前`;
+                    const emoji = e.type === 'birthday' ? '🎂' : e.type === 'buddha' ? '🙏' : e.type === 'pet' ? '🐾' :
+                        '📌';
+                    return `
+                        <div class="list-item" data-id="${e.id}">
+                            <div class="info">
+                                <div class="main">${emoji} ${e.name}</div>
+                                <div class="sub">${formatDate(e.date)} · ${label}</div>
+                            </div>
+                            <button class="btn btn-sm btn-danger" data-action="event-delete" data-id="${e.id}">✕</button>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // ---- 整体渲染 ----
+        function renderAll() {
+            renderDashboard();
+            renderGarden();
+            renderPets();
+            renderPractice();
+            renderMore();
+            updateGreeting();
+        }
+
+        // ---- 问候 ----
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greet = '🌱 早上好';
+            if (hour >= 12 && hour < 18) greet = '🌤️ 下午好';
+            else if (hour >= 18) greet = '🌙 晚上好';
+            document.getElementById('greetingText').textContent = greet + '，今天是个好日子';
+
+            document.getElementById('lunarText').textContent = getLunarToday();
+
+            // 检查是否佛诞日
+            const lunar = getLunarDate(new Date());
+            const buddhaDays = getBuddhaDays();
+            const parts = lunar.replace(/^[闰]/, '').split('月');
+            if (parts.length === 2) {
+                const mStr = parts[0];
+                const dStr = parts[1];
+                const mMap = { '正': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9, '十': 10, '冬': 11,
+                    '腊': 12 };
+                const dMap = { '初一': 1, '初二': 2, '初三': 3, '初四': 4, '初五': 5, '初六': 6, '初七': 7, '初八': 8, '初九': 9, '初十': 10,
+                    '十一': 11, '十二': 12, '十三': 13, '十四': 14, '十五': 15, '十六': 16, '十七': 17, '十八': 18, '十九': 19, '二十': 20,
+                    '廿一': 21, '廿二': 22, '廿三': 23, '廿四': 24, '廿五': 25, '廿六': 26, '廿七': 27, '廿八': 28, '廿九': 29, '三十': 30
+                };
+                const lm = mMap[mStr];
+                const ld = dMap[dStr];
+                if (lm && ld) {
+                    const found = buddhaDays.find(b => b.month === lm && b.day === ld);
+                    if (found) {
+                        document.getElementById('festivalText').textContent = '🙏 ' + found.name;
+                    } else {
+                        // 初一十五
+                        if (ld === 1 || ld === 15) {
+                            document.getElementById('festivalText').textContent = '🕯️ 农历' + (ld === 1 ? '初一' : '十五');
+                        } else {
+                            document.getElementById('festivalText').textContent = '';
+                        }
+                    }
+                }
+            }
+        }
+
+        // ====================================================================
+        //  4. 页面切换
+        // ====================================================================
+        function switchPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById('page-' + page);
+            if (target) target.classList.add('active');
+
+            document.querySelectorAll('.bottom-nav button').forEach(b => b.classList.remove('active'));
+            const navBtn = document.querySelector(`.bottom-nav button[data-page="${page}"]`);
+            if (navBtn) navBtn.classList.add('active');
+
+            // 重新渲染对应页面
+            if (page === 'home') renderDashboard();
+            if (page === 'garden') renderGarden();
+            if (page === 'pet') renderPets();
+            if (page === 'practice') renderPractice();
+            if (page === 'more') renderMore();
+        }
+
+        // ====================================================================
+        //  5. 事件绑定
+        // ====================================================================
+
+        // ---- 5.1 底部导航 ----
+        document.querySelectorAll('.bottom-nav button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                switchPage(this.dataset.page);
+            });
+        });
+
+        // ---- 5.2 深色模式 ----
+        let darkMode = false;
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            darkMode = !darkMode;
+            document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+            this.textContent = darkMode ? '☀️ 浅色' : '🌙 暗色';
+        });
+
+        // ---- 5.3 语音输入 ----
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            document.querySelectorAll('.mic-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const targetId = this.dataset.target;
+                    const input = document.getElementById(targetId);
+                    if (!input) return;
+                    const recognition = new SpeechRecognition();
+                    recognition.lang = 'zh-CN';
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+                    this.classList.add('listening');
+                    recognition.start();
+                    recognition.onresult = (event) => {
+                        const result = event.results[0][0].transcript;
+                        input.value = result;
+                        input.dispatchEvent(new Event('input'));
+                        this.classList.remove('listening');
+                    };
+                    recognition.onerror = () => { this.classList.remove('listening'); };
+                    recognition.onend = () => { this.classList.remove('listening'); };
+                });
+            });
+        } else {
+            document.querySelectorAll('.mic-btn').forEach(btn => btn.style.display = 'none');
+        }
+
+        // ---- 5.4 花园 ----
+        document.getElementById('gardenAddBtn').addEventListener('click', function() {
+            const name = document.getElementById('gardenInput').value.trim();
+            const type = document.getElementById('gardenType').value;
+            const waterFreq = parseInt(document.getElementById('gardenWaterFreq').value) || 0;
+            const lastWater = document.getElementById('gardenLastWater').value || getToday();
+            const plantDate = document.getElementById('gardenPlantDate').value || getToday();
+            if (!name) { alert('请输入植物名称'); return; }
+            appData.garden.push({ id: genId(), name, type, waterFreq, lastWater, plantDate, createdAt: getToday() });
+            saveData(appData);
+            renderGarden();
+            renderDashboard();
+            document.getElementById('gardenInput').value = '';
+            document.getElementById('gardenWaterFreq').value = '';
+        });
+
+        // 花园筛选
+        document.querySelectorAll('.garden-filter').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.garden-filter').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                gardenFilter = this.dataset.filter;
+                renderGarden();
+            });
+        });
+
+        // 花园事件委托
+        document.getElementById('gardenList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            const item = target.closest('.list-item');
+            if (!item) return;
+            const id = item.dataset.id;
+            if (target.dataset.action === 'garden-water') {
+                const plant = appData.garden.find(g => g.id === id);
+                if (plant) {
+                    plant.lastWater = getToday();
+                    saveData(appData);
+                    renderGarden();
+                    renderDashboard();
+                }
+            } else if (target.dataset.action === 'garden-delete') {
+                if (confirm('删除该植物？')) {
+                    appData.garden = appData.garden.filter(g => g.id !== id);
+                    saveData(appData);
+                    renderGarden();
+                    renderDashboard();
+                }
+            }
+        });
+
+        // 花园日记
+        document.getElementById('gardenDiarySave').addEventListener('click', function() {
+            const content = document.getElementById('gardenDiary').value.trim();
+            if (!content) { alert('请写点什么'); return; }
+            appData.gardenDiary.push({ id: genId(), content, date: getToday() });
+            saveData(appData);
+            renderGarden();
+            document.getElementById('gardenDiary').value = '';
+        });
+
+        // ---- 5.5 宠物 ----
+        document.getElementById('petAddBtn').addEventListener('click', function() {
+            const name = document.getElementById('petNameInput').value.trim();
+            const type = document.getElementById('petTypeSelect').value;
+            const birthday = document.getElementById('petBirthday').value || '';
+            if (!name) { alert('请输入宠物名字'); return; }
+            appData.pets.push({ id: genId(), name, type, birthday, feedHistory: [], health: { weight: '', deworm: '',
+                    vaccine: '', notes: '' } });
+            saveData(appData);
+            renderPets();
+            renderDashboard();
+            document.getElementById('petNameInput').value = '';
+            document.getElementById('petBirthday').value = '';
+        });
+
+        // 宠物事件委托
+        document.getElementById('petListContainer').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            const card = target.closest('.card');
+            if (!card) return;
+            const id = card.dataset.id;
+            const pet = appData.pets.find(p => p.id === id);
+            if (!pet) return;
+
+            if (target.dataset.action === 'pet-feed') {
+                if (!pet.feedHistory) pet.feedHistory = [];
+                const today = getToday();
+                if (pet.feedHistory.includes(today)) {
+                    pet.feedHistory = pet.feedHistory.filter(f => f !== today);
+                } else {
+                    pet.feedHistory.push(today);
+                }
+                saveData(appData);
+                renderPets();
+                renderDashboard();
+            } else if (target.dataset.action === 'pet-health') {
+                const notes = prompt('记录健康备注 (如：体重、驱虫、疫苗、状态等):', pet.health?.notes || '');
+                if (notes !== null) {
+                    if (!pet.health) pet.health = {};
+                    pet.health.notes = notes;
+                    saveData(appData);
+                    renderPets();
+                }
+            } else if (target.dataset.action === 'pet-delete') {
+                if (confirm(`删除 ${pet.name} 的档案？`)) {
+                    appData.pets = appData.pets.filter(p => p.id !== id);
+                    saveData(appData);
+                    renderPets();
+                    renderDashboard();
+                }
+            }
+        });
+
+        // ---- 5.6 修行 ----
+        let timerRunning = false;
+        let timerSeconds = 0;
+        let timerInterval = null;
+
+        function updateTimerDisplay() {
+            const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+            const secs = String(timerSeconds % 60).padStart(2, '0');
+            document.getElementById('timerDisplay').textContent = mins + ':' + secs;
+        }
+
+        document.getElementById('timerStartBtn').addEventListener('click', function() {
+            if (timerRunning) {
+                // 暂停
+                clearInterval(timerInterval);
+                timerRunning = false;
+                this.textContent = '▶ 继续';
+                return;
+            }
+            if (timerInterval) {
+                // 继续
+                timerRunning = true;
+                this.textContent = '⏸ 暂停';
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+                return;
+            }
+            // 开始
+            timerSeconds = 0;
+            timerRunning = true;
+            this.textContent = '⏸ 暂停';
+            timerInterval = setInterval(() => {
+                timerSeconds++;
+                updateTimerDisplay();
+            }, 1000);
+        });
+
+        document.getElementById('timerResetBtn').addEventListener('click', function() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerRunning = false;
+            timerSeconds = 0;
+            updateTimerDisplay();
+            document.getElementById('timerStartBtn').textContent = '▶ 开始';
+        });
+
+        document.getElementById('practiceSaveBtn').addEventListener('click', function() {
+            const type = document.getElementById('practiceType').value;
+            const duration = parseInt(document.getElementById('practiceDuration').value) || timerSeconds;
+            if (duration === 0) { alert('请输入修行时长或使用计时器'); return; }
+            const date = getToday();
+            const startTime = new Date().toLocaleTimeString();
+            appData.practice.push({ id: genId(), type, duration, date, startTime });
+            saveData(appData);
+            renderPractice();
+            renderDashboard();
+            document.getElementById('practiceDuration').value = '';
+            // 重置计时器
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerRunning = false;
+            timerSeconds = 0;
+            updateTimerDisplay();
+            document.getElementById('timerStartBtn').textContent = '▶ 开始';
+            alert('🙏 修行记录已保存，功德无量');
+        });
+
+        // ---- 5.7 功课 ----
+        document.getElementById('taskAddBtn').addEventListener('click', function() {
+            const text = document.getElementById('taskInput').value.trim();
+            if (!text) { alert('请输入功课内容'); return; }
+            appData.tasks.push({ id: genId(), text, done: false, createdAt: Date.now() });
+            saveData(appData);
+            renderPractice();
+            document.getElementById('taskInput').value = '';
+        });
+
+        // 功课事件委托 (在修行页面)
+        document.getElementById('taskList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            const item = target.closest('.list-item');
+            if (!item) return;
+            const id = item.dataset.id;
+            if (target.dataset.action === 'task-done') {
+                const t = appData.tasks.find(x => x.id === id);
+                if (t) t.done = true;
+                saveData(appData);
+                renderPractice();
+            } else if (target.dataset.action === 'task-delete') {
+                if (confirm('删除该功课？')) {
+                    appData.tasks = appData.tasks.filter(x => x.id !== id);
+                    saveData(appData);
+                    renderPractice();
+                }
+            }
+        });
+
+        // ---- 5.8 法喜笔记 ----
+        document.getElementById('noteSaveBtn').addEventListener('click', function() {
+            const content = document.getElementById('noteInput').value.trim();
+            if (!content) { alert('请写点什么'); return; }
+            appData.notes.push({ id: genId(), content, date: getToday() });
+            saveData(appData);
+            renderPractice();
+            document.getElementById('noteInput').value = '';
+        });
+
+        // ---- 5.9 记账 ----
+        document.getElementById('moneyAddBtn').addEventListener('click', function() {
+            const amount = parseFloat(document.getElementById('moneyAmount').value);
+            const type = document.getElementById('moneyType').value;
+            const category = document.getElementById('moneyCategory').value.trim() || '未分类';
+            if (isNaN(amount) || amount <= 0) { alert('请输入有效金额'); return; }
+            appData.money.push({ id: genId(), amount, type, category, date: getToday() });
+            saveData(appData);
+            renderMore();
+            renderDashboard();
+            document.getElementById('moneyAmount').value = '';
+            document.getElementById('moneyCategory').value = '';
+        });
+
+        // ---- 5.10 待办 (更多页面) ----
+        document.getElementById('todoMoreAddBtn').addEventListener('click', function() {
+            const text = document.getElementById('todoMoreInput').value.trim();
+            if (!text) { alert('请输入待办'); return; }
+            appData.todos.push({ id: genId(), text, done: false, createdAt: Date.now() });
+            saveData(appData);
+            renderTodoMore();
+            renderDashboard();
+            document.getElementById('todoMoreInput').value = '';
+        });
+
+        // 待办事件委托 (更多页面)
+        document.getElementById('todoMoreList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            const item = target.closest('.list-item');
+            if (!item) return;
+            const id = item.dataset.id;
+            if (target.dataset.action === 'todo-done-more') {
+                const t = appData.todos.find(x => x.id === id);
+                if (t) t.done = true;
+                saveData(appData);
+                renderTodoMore();
+                renderDashboard();
+            } else if (target.dataset.action === 'todo-delete-more') {
+                if (confirm('删除该待办？')) {
+                    appData.todos = appData.todos.filter(x => x.id !== id);
+                    saveData(appData);
+                    renderTodoMore();
+                    renderDashboard();
+                }
+            }
+        });
+
+        // 首页待办完成
+        document.getElementById('dashTodoList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            if (target.dataset.action === 'todo-done-home') {
+                const id = target.dataset.id;
+                const t = appData.todos.find(x => x.id === id);
+                if (t) t.done = true;
+                saveData(appData);
+                renderDashboard();
+                renderTodoMore();
+            }
+        });
+
+        // ---- 5.11 日历 ----
+        document.getElementById('calPrev').addEventListener('click', function() {
+            calMonth--;
+            if (calMonth < 1) { calMonth = 12;
+                calYear--; }
+            renderCalendar();
+        });
+        document.getElementById('calNext').addEventListener('click', function() {
+            calMonth++;
+            if (calMonth > 12) { calMonth = 1;
+                calYear++; }
+            renderCalendar();
+        });
+        // 点击日期跳转
+        document.getElementById('calGrid').addEventListener('click', function(e) {
+            const day = e.target.closest('.day');
+            if (!day || !day.dataset.date) return;
+            const date = day.dataset.date;
+            // 高亮选中
+            document.querySelectorAll('.calendar-grid .day').forEach(d => d.classList.remove('selected'));
+            day.classList.add('selected');
+            // 在纪念日输入框中填入日期
+            document.getElementById('eventDate').value = date;
+        });
+
+        // ---- 5.12 纪念日 ----
+        document.getElementById('eventAddBtn').addEventListener('click', function() {
+            const name = document.getElementById('eventInput').value.trim();
+            const date = document.getElementById('eventDate').value;
+            const type = document.getElementById('eventType').value;
+            if (!name) { alert('请输入纪念日名称'); return; }
+            if (!date) { alert('请选择日期'); return; }
+            appData.events.push({ id: genId(), name, date, type });
+            saveData(appData);
+            renderEvents();
+            renderDashboard();
+            document.getElementById('eventInput').value = '';
+        });
+
+        document.getElementById('eventList').addEventListener('click', function(e) {
+            const target = e.target.closest('[data-action]');
+            if (!target) return;
+            if (target.dataset.action === 'event-delete') {
+                const item = target.closest('.list-item');
+                if (!item) return;
+                const id = item.dataset.id;
+                if (confirm('删除该纪念日？')) {
+                    appData.events = appData.events.filter(e => e.id !== id);
+                    saveData(appData);
+                    renderEvents();
+                    renderDashboard();
+                }
+            }
+        });
+
+        // ---- 5.13 导入导出 ----
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            const dataStr = JSON.stringify(appData, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `小姨工作台_备份_${getToday()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        document.getElementById('importBtn').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                try {
+                    const imported = JSON.parse(ev.target.result);
+                    if (typeof imported !== 'object' || imported === null) throw new Error('格式错误');
+                    if (!confirm('导入将覆盖当前所有数据，确认继续吗？')) return;
+                    const def = getDefaultData();
+                    for (const key in def) {
+                        if (!(key in imported)) imported[key] = def[key];
+                    }
+                    appData = imported;
+                    saveData(appData);
+                    renderAll();
+                    alert('✅ 数据导入成功！');
+                } catch (err) {
+                    alert('❌ 导入失败，请选择正确的 .json 备份文件');
+                }
+            };
+            reader.readAsText(file);
+            e.target.value = '';
+        });
+
+        // ---- 5.14 PWA 安装 ----
+        let deferredPrompt = null;
+        const installBanner = document.getElementById('installBanner');
+
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.classList.add('show');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', function() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    installBanner.classList.remove('show');
+                    deferredPrompt = null;
+                });
+            }
+        });
+
+        document.getElementById('closeInstallBanner').addEventListener('click', function() {
+            installBanner.classList.remove('show');
+        });
+
+        // ---- 5.15 PWA Manifest ----
+        (function setupPWA() {
+            const manifest = {
+                name: '🌿 小姨的工作台',
+                short_name: '小姨工作台',
+                description: '花园 · 宠物 · 修行 · 记账',
+                start_url: location.href.split('?')[0],
+                display: 'standalone',
+                background_color: '#f5f0e8',
+                theme_color: '#8aaa7a',
+                icons: [{
+                    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%238aaa7a'/%3E%3Ctext x='50%25' y='55%25' font-size='280' text-anchor='middle' dy='0.1em' font-family='system-ui' fill='white'%3E🌿%3C/text%3E%3C/svg%3E",
+                    sizes: '512x512',
+                    type: 'image/svg+xml',
+                    purpose: 'any'
+                }, {
+                    src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='30' fill='%238aaa7a'/%3E%3Ctext x='50%25' y='55%25' font-size='100' text-anchor='middle' dy='0.1em' font-family='system-ui' fill='white'%3E🌿%3C/text%3E%3C/svg%3E",
+                    sizes: '192x192',
+                    type: 'image/svg+xml',
+                    purpose: 'any'
+                }]
+            };
+            const manifestBase64 = btoa(JSON.stringify(manifest));
+            const link = document.getElementById('manifestLink');
+            link.href = 'data:application/json;base64,' + manifestBase64;
+        })();
+
+        // ====================================================================
+        //  6. 初始化
+        // ====================================================================
+        renderAll();
+
+        // 如果当前是首页，默认显示
+        console.log('🌿 小姨的工作台 · 禅意花园版已启动');
+        console.log('🙏 愿一切众生平安喜乐');
+
+        // 每天自动刷新数据
+        setInterval(() => {
+            // 检查是否跨天
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                try {
+                    const fresh = JSON.parse(stored);
+                    // 简单合并以防外部修改
+                } catch (e) { /* ignore */ }
+            }
+        }, 60000);
+    </script>
+</body>
+</html>
